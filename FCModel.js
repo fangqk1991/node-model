@@ -28,26 +28,28 @@ class FCModel {
     for (const property in propertyMap) {
       if (propertyMap.hasOwnProperty(property)) {
         const jsonKey = propertyMap[property]
-        if (property in propertyClassMap && typeof data[jsonKey] === 'object') {
-          const obj = objectFromClass(propertyClassMap[property])
-          if (obj instanceof FCModel) {
-            obj.fc_generate(data[jsonKey])
-            this[property] = obj
-          }
-        } else if (property in itemClassMap && Array.isArray(data[jsonKey])) {
-          const arr = []
-          data[jsonKey].forEach(dic => {
-            const obj = objectFromClass(itemClassMap[property])
+        if (jsonKey in data) {
+          if (property in propertyClassMap && data[jsonKey] !== null && typeof data[jsonKey] === 'object') {
+            const obj = objectFromClass(propertyClassMap[property])
             if (obj instanceof FCModel) {
-              obj.fc_generate(dic)
-              arr.push(obj)
-            } else {
-              arr.push(null)
+              obj.fc_generate(data[jsonKey])
+              this[property] = obj
             }
-          })
-          this[property] = arr
-        } else {
-          this[property] = data[jsonKey]
+          } else if (property in itemClassMap && Array.isArray(data[jsonKey])) {
+            const arr = []
+            data[jsonKey].forEach(dic => {
+              const obj = objectFromClass(itemClassMap[property])
+              if (obj instanceof FCModel) {
+                obj.fc_generate(dic)
+                arr.push(obj)
+              } else {
+                arr.push(null)
+              }
+            })
+            this[property] = arr
+          } else {
+            this[property] = data[jsonKey]
+          }
         }
       }
     }
