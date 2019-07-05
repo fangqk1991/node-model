@@ -1,7 +1,7 @@
-const AppModel = require('../FCModel')
+const { FCModel } = require('../../lib/index')
 const ModelSubEx = require('./ModelSubEx')
 
-class ModelMainEx extends AppModel {
+class ModelMainEx extends FCModel {
   constructor() {
     super()
     this.xyy = null

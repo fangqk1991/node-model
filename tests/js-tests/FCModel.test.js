@@ -2,7 +2,7 @@ const ModelMainEx = require('./ModelMainEx')
 const ModelSubEx = require('./ModelSubEx')
 const assert = require('assert')
 
-describe('Test AppModel', () => {
+describe('Test FCModel', () => {
   it(`Test normal`, async () => {
     const data = {
       xyy: 1,

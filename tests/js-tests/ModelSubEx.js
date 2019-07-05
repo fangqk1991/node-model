@@ -1,6 +1,6 @@
-const AppModel = require('../FCModel')
+const { FCModel } = require('../../lib/index')
 
-class ModelSubEx extends AppModel {
+class ModelSubEx extends FCModel {
   fc_propertyMapper() {
     return {
       name: 'name'
