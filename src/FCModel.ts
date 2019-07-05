@@ -1,4 +1,8 @@
-export class FCModel {
+interface MapProtocol {
+  [p: string]: any;
+}
+
+export class FCModel implements MapProtocol {
   fc_defaultInit(): void {}
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
   fc_afterGenerate(data: {[p: string]: any} = {}): void {}
@@ -23,8 +27,8 @@ export class FCModel {
           const obj = new propertyClassMap[property]()
           if (obj instanceof FCModel) {
             obj.fc_generate(data[jsonKey])
-            // @ts-ignore
-            this[property] = obj
+            const _this = this as MapProtocol
+            _this[property] = obj
           }
         } else if (property in itemClassMap && Array.isArray(data[jsonKey])) {
           const arr: any[] = []
@@ -37,11 +41,11 @@ export class FCModel {
               arr.push(null)
             }
           })
-          // @ts-ignore
-          this[property] = arr
+          const _this = this as MapProtocol
+          _this[property] = arr
         } else {
-          // @ts-ignore
-          this[property] = data[jsonKey]
+          const _this = this as MapProtocol
+          _this[property] = data[jsonKey]
         }
       }
     }
@@ -58,8 +62,7 @@ export class FCModel {
     for (const property in propertyMap) {
       const jsonKey = propertyMap[property]
       if (property in this) {
-        // @ts-ignore
-        const entity = this[property]
+        const entity = (this as MapProtocol)[property]
         if (property in propertyClassMap && entity instanceof FCModel) {
           data[jsonKey] = entity.fc_retMap()
         } else if (property in itemClassMap && Array.isArray(entity)) {
