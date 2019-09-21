@@ -6,6 +6,7 @@ export default class ModelMainEx extends FCModel {
   public xxxYYY: any
   public subObj: any
   public subItems: any
+  public noGiven: any
 
   fc_propertyMapper(): {[p: string]: string} {
     return {
@@ -13,6 +14,7 @@ export default class ModelMainEx extends FCModel {
       xxxYYY: 'xxx_yyy',
       subObj: 'sub_obj',
       subItems: 'sub_items',
+      noGiven: 'no_given',
     }
   }
 

@@ -12,7 +12,7 @@ describe('Test FCModel', (): void => {
         name: 'Sub - Obj',
       },
       sub_items: [
-        { name: 'Sub - Obj - 1' },
+        { name: 'Sub - Obj - 1', nick_name: 'xxx 123' },
         { name: 'Sub - Obj - 2' },
         { name: 'Sub - Obj - 3' },
       ]
@@ -30,5 +30,12 @@ describe('Test FCModel', (): void => {
     assert.ok(retMap['xyy'] === data['xyy'])
     assert.ok(retMap['xxx_yyy'] === data['xxx_yyy'])
     assert.ok(!retMap['xxx'])
+
+    const pureModel = obj.fc_pureModel()
+    assert.ok(pureModel['xyy'] === data['xyy'])
+    assert.ok(pureModel['xxxYYY'] === data['xxx_yyy'])
+    assert.ok(!pureModel['xxx'])
+    console.log(obj)
+    console.log(pureModel)
   })
 })
