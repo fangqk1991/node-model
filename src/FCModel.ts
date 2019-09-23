@@ -61,7 +61,13 @@ export class FCModel implements MapProtocol {
         _this[property] = arr
       } else {
         const _this = this as MapProtocol
-        _this[property] = data[jsonKey]
+        if (jsonKey in data) {
+          _this[property] = data[jsonKey]
+        } else {
+          if (!(property in _this)) {
+            _this[property] = undefined
+          }
+        }
       }
     }
 

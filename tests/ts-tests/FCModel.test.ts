@@ -38,4 +38,16 @@ describe('Test FCModel', (): void => {
     console.log(obj)
     console.log(pureModel)
   })
+
+  it(`Test Modify Generate`, (): void => {
+    const obj = new ModelMainEx()
+    obj.fc_generate({})
+    Object.keys(obj.fc_propertyMapper()).forEach((key) => {
+      const _obj = obj as any
+      assert.equal(_obj[key], undefined)
+    })
+    obj.fc_generate({ a: 1, xyy: 2 })
+    assert.equal(obj.xyy, 2)
+    assert.equal('a' in obj, false)
+  })
 })
