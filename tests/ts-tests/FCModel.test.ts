@@ -1,22 +1,27 @@
 import ModelMainEx from './ModelMainEx'
 import ModelSubEx from './ModelSubEx'
 import * as assert from 'assert'
+import {DiffMapper} from "@agora-lab/tools"
+
+const getTestData = () => {
+  return {
+    xyy: 1,
+    xxx_yyy: 'hehehe',
+    xxx: 'ttt',
+    sub_obj: {
+      name: 'Sub - Obj',
+    },
+    sub_items: [
+      { name: 'Sub - Obj - 1', nick_name: 'xxx 123' },
+      { name: 'Sub - Obj - 2' },
+      { name: 'Sub - Obj - 3' },
+    ]
+  }
+}
 
 describe('Test FCModel', (): void => {
-  it(`Test normal`, (): void => {
-    const data = {
-      xyy: 1,
-      xxx_yyy: 'hehehe',
-      xxx: 'ttt',
-      sub_obj: {
-        name: 'Sub - Obj',
-      },
-      sub_items: [
-        { name: 'Sub - Obj - 1', nick_name: 'xxx 123' },
-        { name: 'Sub - Obj - 2' },
-        { name: 'Sub - Obj - 3' },
-      ]
-    }
+  it(`Test Normal`, (): void => {
+    const data = getTestData()
 
     const obj = new ModelMainEx()
     obj.fc_generate(data)
@@ -44,10 +49,21 @@ describe('Test FCModel', (): void => {
     obj.fc_generate({})
     Object.keys(obj.fc_propertyMapper()).forEach((key) => {
       const _obj = obj as any
-      assert.equal(_obj[key], undefined)
+      assert.ok(_obj[key] === undefined)
     })
     obj.fc_generate({ a: 1, xyy: 2 })
     assert.equal(obj.xyy, 2)
     assert.equal('a' in obj, false)
+  })
+
+  it(`Test fc_generateWithModel`, (): void => {
+    const data = getTestData()
+
+    const obj = new ModelMainEx()
+    obj.fc_generate(data)
+
+    const obj2 = new ModelMainEx()
+    obj2.fc_generateWithModel(obj)
+    assert.ok(DiffMapper.checkEquals(obj, obj2))
   })
 })

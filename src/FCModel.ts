@@ -9,12 +9,12 @@ export class FCModel implements MapProtocol {
   fc_defaultInit(): void {}
 
   // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  fc_afterGenerate(data: {[p: string]: any} = {}): void {}
+  fc_afterGenerate(data: MapProtocol = {}): void {}
 
   /**
    * @description Mapping table for (class-property => data-json-key)
    */
-  fc_propertyMapper(): {[p: string]: string} {
+  fc_propertyMapper(): { [p: string]: string } {
     throw new Error(`You must override the perform method.`)
   }
 
@@ -31,27 +31,39 @@ export class FCModel implements MapProtocol {
    * @description Pass json data to build properties of the instance.
    * @param data
    */
-  public fc_generate(data: {[p: string]: any}): void {
+  public fc_generate(data: MapProtocol): void {
+    this._generate(data, false)
+  }
+
+  /**
+   * @description Pass model data to build properties of the instance.
+   * @param data
+   */
+  public fc_generateWithModel(data: MapProtocol): void {
+    this._generate(data, true)
+  }
+
+  private _generate(data: MapProtocol, forProperties: boolean = false): void {
     const propertyMap = this.fc_propertyMapper()
     const propertyClassMap = this.fc_propertyClassMapper()
     const itemClassMap = this.fc_arrayItemClassMapper()
 
     for (const property in propertyMap) {
-      const jsonKey = propertyMap[property]
+      const targetKey = forProperties? property : propertyMap[property]
 
-      if (property in propertyClassMap && data[jsonKey] !== null && typeof data[jsonKey] === 'object') {
+      if (property in propertyClassMap && data[targetKey] !== null && typeof data[targetKey] === 'object') {
         const obj = new propertyClassMap[property]()
         if (obj instanceof FCModel) {
-          obj.fc_generate(data[jsonKey])
+          obj._generate(data[targetKey], forProperties)
           const _this = this as MapProtocol
           _this[property] = obj
         }
-      } else if (property in itemClassMap && Array.isArray(data[jsonKey])) {
+      } else if (property in itemClassMap && Array.isArray(data[targetKey])) {
         const arr: any[] = []
-        data[jsonKey].forEach((dic: {}): void => {
+        data[targetKey].forEach((dic: {}): void => {
           const obj = new itemClassMap[property]()
           if (obj instanceof FCModel) {
-            obj.fc_generate(dic)
+            obj._generate(dic, forProperties)
             arr.push(obj)
           } else {
             arr.push(null)
@@ -61,8 +73,8 @@ export class FCModel implements MapProtocol {
         _this[property] = arr
       } else {
         const _this = this as MapProtocol
-        if (jsonKey in data) {
-          _this[property] = data[jsonKey]
+        if (targetKey in data) {
+          _this[property] = data[targetKey]
         } else {
           if (!(property in _this)) {
             _this[property] = undefined
@@ -79,16 +91,16 @@ export class FCModel implements MapProtocol {
     const propertyClassMap = this.fc_propertyClassMapper()
     const itemClassMap = this.fc_arrayItemClassMapper()
 
-    const data: {[p: string]: any} = {}
+    const data: MapProtocol = {}
     for (const property in propertyMap) {
       const targetKey = forProperties ? property : propertyMap[property]
       if (property in this) {
         const entity = (this as MapProtocol)[property]
         if (property in propertyClassMap && entity instanceof FCModel) {
-          data[targetKey] = forProperties ? entity.fc_pureModel() : entity.fc_retMap()
+          data[targetKey] = forProperties ? entity.fc_pureModel() : entity.fc_encode()
         } else if (property in itemClassMap && Array.isArray(entity)) {
           data[targetKey] = entity.map((item): {} => {
-            return forProperties ? item.fc_pureModel() : item.fc_retMap()
+            return forProperties ? item.fc_pureModel() : item.fc_encode()
           })
         } else {
           data[targetKey] = entity
@@ -102,14 +114,14 @@ export class FCModel implements MapProtocol {
   /**
    * @description Export JSON data, keys as fc_propertyMapper()'s values
    */
-  public fc_encode(): { [p: string]: any } {
+  public fc_encode(): MapProtocol {
     return this._encode(false)
   }
 
   /**
    * @description Export pure model data, keys as fc_propertyMapper()'s keys
    */
-  public fc_pureModel(): { [p: string]: any } {
+  public fc_pureModel(): MapProtocol {
     return this._encode(true)
   }
 
@@ -117,7 +129,7 @@ export class FCModel implements MapProtocol {
    * @deprecated
    * @description Same as fc_encode
    */
-  public fc_retMap(): { [p: string]: any } {
+  public fc_retMap(): MapProtocol {
     return this.fc_encode()
   }
 
