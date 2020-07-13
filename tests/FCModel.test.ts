@@ -1,7 +1,7 @@
 import ModelMainEx from './ModelMainEx'
 import ModelSubEx from './ModelSubEx'
 import * as assert from 'assert'
-import {DiffMapper} from "@agora-lab/tools"
+import { DiffMapper } from '@agora-lab/tools'
 
 const getTestData = () => {
   return {
@@ -11,11 +11,7 @@ const getTestData = () => {
     sub_obj: {
       name: 'Sub - Obj',
     },
-    sub_items: [
-      { name: 'Sub - Obj - 1', nick_name: 'xxx 123' },
-      { name: 'Sub - Obj - 2' },
-      { name: 'Sub - Obj - 3' },
-    ]
+    sub_items: [{ name: 'Sub - Obj - 1', nick_name: 'xxx 123' }, { name: 'Sub - Obj - 2' }, { name: 'Sub - Obj - 3' }],
   }
 }
 
@@ -40,8 +36,8 @@ describe('Test FCModel', (): void => {
     assert.ok(pureModel['xyy'] === data['xyy'])
     assert.ok(pureModel['xxxYYY'] === data['xxx_yyy'])
     assert.ok(!pureModel['xxx'])
-    console.log(obj)
-    console.log(pureModel)
+    console.info(obj)
+    console.info(pureModel)
   })
 
   it(`Test Modify Generate`, (): void => {

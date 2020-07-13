@@ -1,5 +1,5 @@
 interface MapProtocol {
-  [p: string]: any;
+  [p: string]: any
 }
 
 export class FCModel implements MapProtocol {
@@ -8,8 +8,7 @@ export class FCModel implements MapProtocol {
    */
   fc_defaultInit(): void {}
 
-  // eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars
-  fc_afterGenerate(data: MapProtocol = {}): void {}
+  fc_afterGenerate(_data: MapProtocol = {}): void {}
 
   /**
    * @description Mapping table for (class-property => data-json-key)
@@ -18,7 +17,7 @@ export class FCModel implements MapProtocol {
     throw new Error(`You must override the perform method.`)
   }
 
-  constructor () {
+  constructor() {
     const _this = this as any
     const propertyList = Object.keys(this.fc_propertyMapper())
     propertyList.forEach((property: string) => {
@@ -49,7 +48,7 @@ export class FCModel implements MapProtocol {
     const itemClassMap = this.fc_arrayItemClassMapper()
 
     for (const property in propertyMap) {
-      const targetKey = forProperties? property : propertyMap[property]
+      const targetKey = forProperties ? property : propertyMap[property]
 
       if (property in propertyClassMap && data[targetKey] !== null && typeof data[targetKey] === 'object') {
         const obj = new propertyClassMap[property]()
@@ -136,14 +135,14 @@ export class FCModel implements MapProtocol {
   /**
    * @description If some property is FCModel's sub class instance, declare the class in this mapper.
    */
-  public fc_propertyClassMapper(): {[p: string]: { new(): FCModel }} {
+  public fc_propertyClassMapper(): { [p: string]: { new (): FCModel } } {
     return {}
   }
 
   /**
    * @description If some property is an array of FCModel's sub class instance, declare the class in this mapper.
    */
-  public fc_arrayItemClassMapper(): {[p: string]: { new(): FCModel }} {
+  public fc_arrayItemClassMapper(): { [p: string]: { new (): FCModel } } {
     return {}
   }
 }

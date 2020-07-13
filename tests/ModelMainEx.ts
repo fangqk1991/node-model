@@ -1,5 +1,5 @@
-import { FCModel } from '../../src'
-import ModelSubEx from "./ModelSubEx"
+import { FCModel } from '../src'
+import ModelSubEx from './ModelSubEx'
 
 export default class ModelMainEx extends FCModel {
   public xyy: any
@@ -8,7 +8,7 @@ export default class ModelMainEx extends FCModel {
   public subItems: any
   public noGiven: any
 
-  fc_propertyMapper(): {[p: string]: string} {
+  fc_propertyMapper(): { [p: string]: string } {
     return {
       xyy: 'xyy',
       xxxYYY: 'xxx_yyy',
@@ -18,13 +18,13 @@ export default class ModelMainEx extends FCModel {
     }
   }
 
-  fc_propertyClassMapper(): {[p: string]: { new(): FCModel }} {
+  fc_propertyClassMapper(): { [p: string]: { new (): FCModel } } {
     return {
       subObj: ModelSubEx,
     }
   }
 
-  fc_arrayItemClassMapper(): {[p: string]: { new(): FCModel }} {
+  fc_arrayItemClassMapper(): { [p: string]: { new (): FCModel } } {
     return {
       subItems: ModelSubEx,
     }
