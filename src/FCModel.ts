@@ -145,4 +145,8 @@ export class FCModel implements MapProtocol {
   public fc_arrayItemClassMapper(): { [p: string]: { new (): FCModel } } {
     return {}
   }
+
+  public toString() {
+    return JSON.stringify(this.fc_pureModel(), null, 2)
+  }
 }
