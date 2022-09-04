@@ -1,7 +1,7 @@
 import ModelMainEx from './ModelMainEx'
 import ModelSubEx from './ModelSubEx'
 import * as assert from 'assert'
-import { DiffMapper } from '@agora-lab/tools'
+import { DiffMapper } from '@fangcha/tools'
 
 const getTestData = () => {
   return {
@@ -27,7 +27,7 @@ describe('Test FCModel', (): void => {
     assert.ok(obj.subObj instanceof ModelSubEx && obj.subObj.name === data['sub_obj']['name'])
     assert.ok(Array.isArray(obj.subItems) && obj.subItems.length === data['sub_items'].length)
 
-    const retMap = obj.fc_retMap()
+    const retMap = obj.fc_encode()
     assert.ok(retMap['xyy'] === data['xyy'])
     assert.ok(retMap['xxx_yyy'] === data['xxx_yyy'])
     assert.ok(!retMap['xxx'])

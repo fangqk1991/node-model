@@ -125,14 +125,6 @@ export class FCModel implements MapProtocol {
   }
 
   /**
-   * @deprecated
-   * @description Same as fc_encode
-   */
-  public fc_retMap(): MapProtocol {
-    return this.fc_encode()
-  }
-
-  /**
    * @description If some property is FCModel's sub class instance, declare the class in this mapper.
    */
   public fc_propertyClassMapper(): { [p: string]: { new (): FCModel } } {
